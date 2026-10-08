@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Types (app)
+        run: npx tsc --noEmit -p .
+      - name: Types (Convex functions)
+        run: npx tsc --noEmit -p convex
+      - name: Lint (UI)
+        run: npx biome check src
+      - name: Extension syntax
+        run: for f in extension/*.js; do node --check "$f"; done
+      - name: Shell scripts
+        run: bash -n install.sh ops/*.sh

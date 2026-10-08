@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Market Radar : veille emploi et candidatures auto-hébergées, avec une IA locale. Rien n'est envoyé sans ton clic.">
+<title>Market Radar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one editorial column (max 1080px) with a section label rail on wide screens;
+   the hero pairs the thesis with a live radar screen. */
+:root {
+  --paper: #f4f6f7;
+  --surface: #ffffff;
+  --ink: #13233a;
+  --muted: #566679;
+  --line: #d8dfe5;
+  --signal: #c84a12;
+  --signal-soft: #fbe9df;
+  --good: #2b8a63;
+  --good-soft: #e1f2ea;
+  --scope: #0f1d30;
+  --scope-ring: #2a4462;
+  --scope-text: #b9c9da;
+  --font-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0d1520; --surface: #131e2c; --ink: #e6edf4; --muted: #95a6b8; --line: #243346;
+    --signal: #ff8b52; --signal-soft: #3a2218; --good: #5ac797; --good-soft: #15322a;
+    --scope: #08111c; --scope-ring: #22405f; --scope-text: #a9bdd1; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0d1520; --surface: #131e2c; --ink: #e6edf4; --muted: #95a6b8; --line: #243346;
+  --signal: #ff8b52; --signal-soft: #3a2218; --good: #5ac797; --good-soft: #15322a;
+  --scope: #08111c; --scope-ring: #22405f; --scope-text: #a9bdd1; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1rem/1.6 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+
+/* Top bar */
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 20px; }
+.brand { display: flex; align-items: center; gap: 10px; font: 700 1.05rem var(--font-display); text-decoration: none; }
+.brand svg { width: 26px; height: 26px; }
+.bar nav { display: flex; gap: 20px; flex-wrap: wrap; font-size: .92rem; }
+.bar nav a { text-decoration: none; color: var(--muted); }
+.bar nav a:hover, .bar nav a:focus-visible { color: var(--ink); }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(24px, 5vw, 64px); align-items: center; padding-block: clamp(24px, 6vw, 72px) clamp(32px, 6vw, 64px); }
+.eyebrow { font: 500 .78rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 800 clamp(2.6rem, 7vw, 4.6rem)/0.98 var(--font-display); letter-spacing: -.025em; margin: 14px 0 18px; text-wrap: balance; }
+.lead { font: 500 clamp(1.2rem, 2.4vw, 1.5rem)/1.35 var(--font-display); margin: 0 0 16px; text-wrap: balance; }
+.hero p.body { color: var(--muted); max-width: 34rem; margin: 0 0 26px; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 8px; font: 600 .95rem var(--font-body); text-decoration: none; border: 1px solid var(--line); background: var(--surface); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.facts { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 30px 0 0; padding: 0; list-style: none; font-size: .9rem; color: var(--muted); }
+.facts b { display: block; font: 700 1.35rem var(--font-display); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.scope { position: relative; background: var(--scope); border-radius: 18px; padding: 14px; color: var(--scope-text); }
+.scope canvas { display: block; width: 100%; aspect-ratio: 1; max-width: 100%; }
+.scope figcaption { display: flex; justify-content: space-between; gap: 12px; font: 400 .74rem var(--font-mono); padding: 10px 4px 2px; letter-spacing: .03em; }
+
+/* Sections */
+section { padding-block: clamp(40px, 7vw, 76px); border-top: 1px solid var(--line); }
+.sec { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 32px; }
+.sec > header .label { font: 500 .76rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--signal); }
+h2 { font: 700 clamp(1.6rem, 3.4vw, 2.2rem)/1.15 var(--font-display); letter-spacing: -.015em; margin: 0 0 14px; text-wrap: balance; }
+h3 { font: 700 1.08rem/1.3 var(--font-display); margin: 0 0 6px; }
+.intro { color: var(--muted); max-width: 40rem; margin: 0 0 28px; }
+
+/* Journey of an offer */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: step; }
+.steps li { counter-increment: step; display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 16px; align-items: start; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.steps li::before { content: counter(step, decimal-leading-zero); font: 500 .85rem var(--font-mono); color: var(--muted); padding-top: 3px; }
+.steps p { margin: 0; color: var(--muted); font-size: .95rem; }
+.who { font: 500 .72rem var(--font-mono); padding: 3px 8px; border-radius: 999px; white-space: nowrap; border: 1px solid var(--line); color: var(--muted); }
+.who.you { background: var(--signal-soft); color: var(--signal); border-color: transparent; }
+
+/* App glimpses */
+.glimpses { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.glimpse { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.glimpse .cap { font-size: .9rem; color: var(--muted); margin: 0; }
+.mock { border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .84rem; display: grid; gap: 8px; background: var(--paper); }
+.mock .co { font-size: .74rem; color: var(--muted); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.mock .ti { font-weight: 600; line-height: 1.3; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.pill { font: 600 .74rem var(--font-mono); padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.pill.score { border-color: var(--ink); }
+.new { color: var(--good); font: 500 .72rem var(--font-body); background: var(--good-soft); padding: 1px 7px; border-radius: 999px; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-size: .72rem; padding: 1px 7px; border-radius: 6px; border: 1px solid var(--line); color: var(--muted); }
+.status { font: 500 .72rem var(--font-body); padding: 2px 8px; border-radius: 6px; }
+.status.ok { background: var(--good-soft); color: var(--good); }
+.status.wait { background: var(--paper); border: 1px solid var(--line); color: var(--muted); }
+.status.no { background: var(--signal-soft); color: var(--signal); }
+.meter { height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.meter i { display: block; height: 100%; width: 22%; background: var(--signal); }
+
+/* Guardrails */
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 36px; margin: 0; }
+.rules div { min-width: 0; }
+.rules dt { font: 700 1.02rem var(--font-display); margin-bottom: 4px; }
+.rules dd { margin: 0; color: var(--muted); font-size: .95rem; }
+
+/* Architecture */
+.arch { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.4fr) auto minmax(0, 1fr); gap: 12px; align-items: stretch; }
+.zone { border: 1px dashed var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.zone.server { border-style: solid; border-color: var(--ink); }
+.zone > span { font: 500 .72rem var(--font-mono); text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: .86rem; }
+.box small { display: block; color: var(--muted); font: 400 .72rem var(--font-mono); }
+.link { align-self: center; font: 500 1.1rem var(--font-mono); color: var(--muted); }
+
+/* Install */
+.reqs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0 0 28px; }
+.reqs div { border-top: 2px solid var(--ink); padding-top: 8px; min-width: 0; }
+.reqs dt { font: 500 .74rem var(--font-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.reqs dd { margin: 2px 0 0; font: 600 1rem var(--font-display); }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.tabs button { font: 500 .9rem var(--font-body); padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.panel p { color: var(--muted); margin: 0 0 12px; max-width: 42rem; }
+.code { position: relative; background: var(--scope); color: #dfe8f1; border-radius: 10px; margin: 0 0 14px; }
+.code pre { margin: 0; padding: 16px 92px 16px 16px; overflow-x: auto; font: 400 .86rem/1.6 var(--font-mono); }
+.code .c { color: #8ea4bb; }
+.copy { position: absolute; top: 10px; right: 10px; font: 500 .74rem var(--font-body); padding: 5px 10px; border-radius: 6px; border: 1px solid #36506d; background: transparent; color: #dfe8f1; cursor: pointer; }
+.agent { margin-top: 30px; padding: 20px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); display: grid; gap: 10px; }
+.agent p { margin: 0; color: var(--muted); }
+
+/* Sources */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { font-size: .86rem; padding: 4px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+
+/* FAQ */
+details { border-bottom: 1px solid var(--line); padding: 14px 0; }
+summary { cursor: pointer; font: 600 1.02rem var(--font-display); list-style-position: outside; }
+details p { color: var(--muted); margin: 10px 0 0; max-width: 44rem; }
+
+footer { border-top: 1px solid var(--line); padding-block: 28px 40px; color: var(--muted); font-size: .88rem; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; }
+  .sec { grid-template-columns: 1fr; gap: 8px; }
+  .glimpses { grid-template-columns: 1fr; }
+  .rules { grid-template-columns: 1fr; }
+  .arch { grid-template-columns: 1fr; }
+  .link { transform: rotate(90deg); justify-self: center; }
+  .reqs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .steps li { grid-template-columns: 36px minmax(0, 1fr); }
+  .steps li .who { grid-column: 2; justify-self: start; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <div class="bar">
+    <a class="brand" href="#top" aria-label="Market Radar">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="16" r="8" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/><path d="M16 16 L27 9" stroke="var(--signal)" stroke-width="2.5" stroke-linecap="round"/><circle cx="22" cy="20" r="2.2" fill="var(--signal)"/></svg>
+      Market Radar
+    </a>
+    <nav aria-label="Sections">
+      <a href="#parcours">Parcours</a>
+      <a href="#garde-fous">Garde-fous</a>
+      <a href="#installer">Installer</a>
+      <a href="https://github.com/simonw31/market-radar">GitHub</a>
+    </nav>
+  </div>
+
+  <header class="hero" id="top">
+    <div>
+      <div class="eyebrow">Logiciel libre · auto-hébergé · licence MIT</div>
+      <h1>Market Radar</h1>
+      <p class="lead">Ta veille emploi et tes candidatures, sur ta propre machine.</p>
+      <p class="body">Il surveille les sites carrière de 40 grandes entreprises, classe chaque offre selon ton profil, prépare un CV et une lettre adaptés avec une IA locale, remplit les portails de recrutement et suit les réponses dans ta boîte mail. Tu gardes la main sur chaque envoi.</p>
+      <div class="actions">
+        <a class="btn primary" href="#installer">Installer en une commande</a>
+        <a class="btn" href="https://github.com/simonw31/market-radar">Voir le code</a>
+      </div>
+      <ul class="facts">
+        <li><b>40</b>sites carrière suivis</li>
+        <li><b>0</b>clé d'API, 0 abonnement</li>
+        <li><b>~80 s</b>pour un CV et une lettre</li>
+      </ul>
+    </div>
+    <figure class="scope" aria-label="Radar animé : des offres apparaissent à mesure que le balayage passe">
+      <canvas id="radar" width="560" height="560"></canvas>
+      <figcaption><span>Illustration · offres classées P1 au centre</span><span id="sweep-count">balayage</span></figcaption>
+    </figure>
+  </header>
+</div>
+
+<section id="parcours">
+  <div class="wrap sec">
+    <header><div class="label">Le parcours</div></header>
+    <div>
+      <h2>D'une offre publiée à une réponse dans ta boîte</h2>
+      <p class="intro">Market Radar fait le travail répétitif. Les deux décisions qui comptent restent les tiennes : valider ce qui part, et cliquer « Envoyer ».</p>
+      <ol class="steps">
+        <li><div><h3>Collecte</h3><p>Le worker lit les pages carrière (Workday, Talentsoft, SmartRecruiters, SuccessFactors…) à l'heure choisie ou quand tu cliques.</p></div><span class="who">serveur</span></li>
+        <li><div><h3>Score sur 100</h3><p>Pertinence technique, marchés financiers, adéquation au profil, expérience demandée, contrat. Les postes trop seniors descendent, les offres de moins de 24 h sont marquées.</p></div><span class="who">serveur</span></li>
+        <li><div><h3>Rapport</h3><p>Un email du jour ou de la semaine avec les nouvelles offres pertinentes de chaque profil. Facultatif.</p></div><span class="who">serveur</span></li>
+        <li><div><h3>CV et lettre</h3><p>L'IA locale choisit tes expériences les plus utiles pour l'offre et écrit l'accroche. Les PDF sont assemblés à partir de gabarits sobres, nommés pour le poste.</p></div><span class="who">IA locale</span></li>
+        <li><div><h3>Validation</h3><p>Tu relis, tu corriges si besoin, tu valides. Rien n'avance sans cette étape.</p></div><span class="who you">ton clic</span></li>
+        <li><div><h3>Dépôt sur le portail</h3><p>L'extension Chrome se connecte avec ton gestionnaire de mots de passe, remplit le formulaire, joint le CV et la lettre, puis s'arrête avant « Envoyer ».</p></div><span class="who you">ton clic</span></li>
+        <li><div><h3>Suivi</h3><p>Le lecteur de boîte mail, en lecture seule, reconnaît les accusés de réception, tests, entretiens et refus, et met la candidature à jour.</p></div><span class="who">serveur</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="apercu">
+  <div class="wrap sec">
+    <header><div class="label">Dans l'appli</div></header>
+    <div>
+      <h2>Trois écrans que tu ouvres tous les jours</h2>
+      <div class="glimpses">
+        <div class="glimpse">
+          <div class="mock" aria-label="Exemple de ligne du radar">
+            <div class="co">Exemple de banque <span class="new">● Vient de sortir</span></div>
+            <div class="row"><span class="ti">Stage Analyste Données – Marchés H/F</span><span class="pill score">92</span></div>
+            <div class="tags"><span class="tag">Stage</span><span class="tag">Paris</span><span class="tag">Python</span><span class="tag">SQL</span><span class="pill">P1</span></div>
+          </div>
+          <p class="cap"><b>Radar.</b> Toutes les offres actives, filtrées par profil, contrat et priorité.</p>
+        </div>
+        <div class="glimpse">
+          <div class="mock" aria-label="Exemple de tableau de suivi">
+            <div class="row"><span>Analyste KYC · Banque A</span><span class="status ok">Entretien</span></div>
+            <div class="row"><span>Data Engineer · Conseil B</span><span class="status wait">Envoyée</span></div>
+            <div class="row"><span>Stage BI · Industrie C</span><span class="status no">Refus</span></div>
+          </div>
+          <p class="cap"><b>Suivi.</b> Le tableau de tes candidatures, relances à 7 jours et export CSV.</p>
+        </div>
+        <div class="glimpse">
+          <div class="mock" aria-label="Exemple de barre des tâches">
+            <div class="row"><b>Collecte des offres</b><span class="pill">12 s</span></div>
+            <div class="co">9 / 40 sources · Thales</div>
+            <div class="meter"><i></i></div>
+            <div class="row"><span>Candidature · Business Analyst</span><span class="status ok">PDF prêts</span></div>
+          </div>
+          <p class="cap"><b>Barre des tâches.</b> Ce qui tourne en ce moment, en bas à droite de l'écran.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="garde-fous">
+  <div class="wrap sec">
+    <header><div class="label">Garde-fous</div></header>
+    <div>
+      <h2>Ce qu'il ne fera jamais à ta place</h2>
+      <dl class="rules">
+        <div><dt>Envoyer une candidature</dt><dd>Un email de candidature part seulement après validation et confirmation, avec au plus 10 envois par jour. Sur les portails, c'est toujours toi qui cliques « Envoyer ».</dd></div>
+        <div><dt>Envoyer tes données ailleurs</dt><dd>Base de données, IA (Ollama) et rendu PDF (Typst) tournent sur ton serveur. Aucune clé d'API, aucun service tiers.</dd></div>
+        <div><dt>Retenir tes mots de passe</dt><dd>L'extension n'en stocke aucun. Elle laisse Chrome ou 1Password remplir la connexion, et pré-remplit seulement l'email à la création d'un compte.</dd></div>
+        <div><dt>Toucher à ta boîte mail</dt><dd>Lecture seule : rien n'est marqué comme lu, déplacé ou supprimé. Seuls les emails de recruteurs sont gardés.</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="architecture">
+  <div class="wrap sec">
+    <header><div class="label">Architecture</div></header>
+    <div>
+      <h2>Cinq conteneurs Docker, rien d'autre</h2>
+      <p class="intro">Tout tient dans un <code>docker-compose.yml</code>. Le serveur ne sort que pour lire les pages carrière et, si tu le veux, pour les emails.</p>
+      <div class="arch">
+        <div class="zone"><span>Ton navigateur</span><div class="box">Application web</div><div class="box">Extension Chrome<small>remplit les portails</small></div></div>
+        <div class="link" aria-hidden="true">⇄</div>
+        <div class="zone server"><span>Ton serveur</span>
+          <div class="box">web<small>:3100 · TanStack Start</small></div>
+          <div class="box">Convex<small>:3210 · base + fichiers</small></div>
+          <div class="box">worker<small>collecte · PDF · emails</small></div>
+          <div class="box">Ollama<small>qwen3.5:4b · 127.0.0.1</small></div>
+        </div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="zone"><span>Dehors</span><div class="box">Sites carrière<small>lecture seule</small></div><div class="box">SMTP / IMAP<small>facultatif</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="installer">
+  <div class="wrap sec">
+    <header><div class="label">Installer</div></header>
+    <div>
+      <h2>Une commande, dix minutes</h2>
+      <p class="intro">Le script vérifie la machine, écrit la configuration, génère les secrets, télécharge le modèle, construit et démarre tout. Tu peux le relancer sans rien perdre.</p>
+      <dl class="reqs">
+        <div><dt>Processeur</dt><dd>4 cœurs</dd></div>
+        <div><dt>Mémoire</dt><dd>8 Go</dd></div>
+        <div><dt>Disque</dt><dd>15 Go</dd></div>
+        <div><dt>Logiciel</dt><dd>Docker + git</dd></div>
+      </dl>
+      <div class="tabs" role="tablist" aria-label="Où installer">
+        <button role="tab" id="tab-home" aria-controls="p-home" aria-selected="true">Serveur à la maison</button>
+        <button role="tab" id="tab-ts" aria-controls="p-ts" aria-selected="false">VPS + Tailscale</button>
+        <button role="tab" id="tab-ssh" aria-controls="p-ssh" aria-selected="false">VPS + tunnel SSH</button>
+      </div>
+      <div class="panel" role="tabpanel" id="p-home" aria-labelledby="tab-home">
+        <p>Le serveur reste derrière ta box. Tout ton réseau local peut ouvrir l'application.</p>
+        <div class="code"><pre><span class="c"># sur le serveur</span>
+git clone https://github.com/simonw31/market-radar.git
+cd market-radar
+./install.sh</pre><button class="copy" type="button">Copier</button></div>
+      </div>
+      <div class="panel" role="tabpanel" id="p-ts" aria-labelledby="tab-ts" hidden>
+        <p>Recommandé sur un VPS. Les ports n'écoutent que sur ton réseau privé Tailscale : rien n'est ouvert sur Internet.</p>
+        <div class="code"><pre><span class="c"># sur le VPS, Tailscale installé et connecté</span>
+git clone https://github.com/simonw31/market-radar.git
+cd market-radar
+./install.sh --host "$(tailscale ip -4)" --bind "$(tailscale ip -4)" --yes</pre><button class="copy" type="button">Copier</button></div>
+      </div>
+      <div class="panel" role="tabpanel" id="p-ssh" aria-labelledby="tab-ssh" hidden>
+        <p>Sans Tailscale : l'application n'écoute que sur le VPS, et tu y accèdes par un tunnel depuis ton ordinateur.</p>
+        <div class="code"><pre><span class="c"># sur le VPS</span>
+./install.sh --host localhost --bind 127.0.0.1 --yes
+
+<span class="c"># sur ton ordinateur, puis ouvre http://localhost:3100</span>
+ssh -N -L 3100:127.0.0.1:3100 -L 3210:127.0.0.1:3210 moi@mon-vps</pre><button class="copy" type="button">Copier</button></div>
+      </div>
+      <div class="agent">
+        <h3>Avec un agent IA</h3>
+        <p>Le dépôt contient <code>READMELLM.md</code>, un guide écrit pour Claude Code, Codex ou Cursor. L'agent vérifie la machine, te demande comment tu veux y accéder, installe, vérifie, et n'affiche jamais tes mots de passe.</p>
+        <div class="code"><pre>Installe Market Radar sur ce serveur en suivant READMELLM.md
+du dépôt https://github.com/simonw31/market-radar</pre><button class="copy" type="button">Copier</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sources">
+  <div class="wrap sec">
+    <header><div class="label">Sources</div></header>
+    <div>
+      <h2>40 sites carrière au départ</h2>
+      <p class="intro">Banque, conseil, industrie, tech. Un nouveau site se branche en quelques dizaines de lignes, souvent en réutilisant un connecteur Workday ou SmartRecruiters existant.</p>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+</section>
+
+<section id="questions">
+  <div class="wrap sec">
+    <header><div class="label">Questions</div></header>
+    <div>
+      <details><summary>Est-ce que ça postule à ma place ?</summary><p>Non. Il prépare tout et remplit les formulaires, mais chaque candidature attend ta validation, et sur les portails c'est toi qui cliques « Envoyer ». Seuls les rapports de veille peuvent partir automatiquement.</p></details>
+      <details><summary>Faut-il une carte graphique ?</summary><p>Non. Le modèle par défaut tourne sur le processeur : environ 3 minutes pour structurer un CV, 70 à 90 secondes pour une candidature sur un serveur à 12 cœurs.</p></details>
+      <details><summary>Puis-je l'ouvrir sur Internet avec un nom de domaine ?</summary><p>Pas tel quel : l'application n'a pas de comptes utilisateurs. Utilise Tailscale ou un tunnel SSH, ou place devant une authentification qui couvre aussi Convex.</p></details>
+      <details><summary>Et si un portail change son formulaire ?</summary><p>L'adaptateur peut casser. Le bouton « Diagnostic » de l'extension copie la structure du formulaire, sans aucune valeur personnelle, pour le corriger rapidement.</p></details>
+      <details><summary>Plusieurs personnes sur la même installation ?</summary><p>Oui : un profil par personne, avec son CV, ses critères, son radar et son rapport. Tout le monde sur l'installation voit tout, donc partage-la seulement avec des proches.</p></details>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <span>Market Radar · licence MIT</span>
+    <span><a href="https://github.com/simonw31/market-radar">github.com/simonw31/market-radar</a></span>
+  </footer>
+</div>
+
+<script>
+(() => {
+  // --- Sources
+  const sources = ['Crédit Agricole CIB', 'Société Générale', 'BNP Paribas', 'J.P. Morgan', 'Goldman Sachs', 'Amundi', 'Wavestone', 'Sopra Steria', 'Devoteam', 'Talan', 'Capgemini', 'Accenture', 'Deloitte', 'EY', 'KPMG', 'PwC', 'Airbus', 'Thales', 'Safran', 'Dassault Systèmes', 'Schneider Electric', 'Renault Group', 'Stellantis', 'Bosch', 'Eiffage', 'VINCI', 'Veolia', 'TotalEnergies', 'ENGIE', 'Sanofi', 'LVMH', 'Orange', 'Publicis Groupe', 'Ubisoft', 'Google', 'Microsoft', 'Amazon / AWS', 'NVIDIA', 'Salesforce', 'Adobe']
+  const chips = document.getElementById('chips')
+  for (const name of sources) {
+    const span = document.createElement('span')
+    span.textContent = name
+    chips.append(span)
+  }
+
+  // --- Tabs
+  const tabs = [...document.querySelectorAll('[role=tab]')]
+  const select = (tab) => {
+    for (const other of tabs) {
+      const on = other === tab
+      other.setAttribute('aria-selected', String(on))
+      other.tabIndex = on ? 0 : -1
+      document.getElementById(other.getAttribute('aria-controls')).hidden = !on
+    }
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => select(tab))
+    tab.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return
+      const next = tabs[(index + (event.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]
+      select(next)
+      next.focus()
+    })
+  })
+
+  // --- Copy buttons
+  for (const button of document.querySelectorAll('.copy')) {
+    button.addEventListener('click', () => {
+      const pre = button.parentElement.querySelector('pre')
+      const text = pre.innerText.split('\n').filter((line) => !line.trim().startsWith('#')).join('\n').trim()
+      const done = (label) => {
+        button.textContent = label
+        setTimeout(() => (button.textContent = 'Copier'), 1600)
+      }
+      navigator.clipboard.writeText(text).then(() => done('Copié'), () => {
+        const range = document.createRange()
+        range.selectNodeContents(pre)
+        const selection = getSelection()
+        selection.removeAllRanges()
+        selection.addRange(range)
+        done('Sélectionné')
+      })
+    })
+  }
+
+  // --- Radar
+  const canvas = document.getElementById('radar')
+  const ctx = canvas.getContext('2d')
+  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches
+  // Example offers: distance from the centre = 100 - score.
+  const blips = [
+    { label: 'Data Analyst · 94', angle: 0.5, score: 94 },
+    { label: 'Business Analyst · 88', angle: 1.9, score: 88 },
+    { label: 'Analyste KYC · 81', angle: 3.1, score: 81 },
+    { label: 'Data Engineer · 76', angle: 4.2, score: 76 },
+    { label: 'Contrôle de gestion · 58', angle: 5.3, score: 58 },
+    { label: '', angle: 2.6, score: 44 }, { label: '', angle: 0.1, score: 37 }, { label: '', angle: 4.8, score: 62 },
+    { label: '', angle: 3.7, score: 29 }, { label: '', angle: 1.2, score: 51 }, { label: '', angle: 5.9, score: 70 },
+  ]
+  let sweep = 0.8
+  let last = performance.now()
+  function draw(now) {
+    const size = canvas.width
+    const center = size / 2
+    const radius = center - 22
+    const ring = css('--scope-ring') || '#2a4462'
+    const text = css('--scope-text') || '#b9c9da'
+    const signal = css('--signal') || '#ff8b52'
+    ctx.clearRect(0, 0, size, size)
+    ctx.lineWidth = 1
+    ctx.strokeStyle = ring
+    for (const fraction of [0.25, 0.5, 0.75, 1]) {
+      ctx.beginPath()
+      ctx.arc(center, center, radius * fraction, 0, Math.PI * 2)
+      ctx.stroke()
+    }
+    ctx.beginPath()
+    ctx.moveTo(center - radius, center); ctx.lineTo(center + radius, center)
+    ctx.moveTo(center, center - radius); ctx.lineTo(center, center + radius)
+    ctx.stroke()
+    ctx.fillStyle = text
+    ctx.font = '500 15px "IBM Plex Mono", monospace'
+    ctx.fillText('P1', center + 6, center - radius * 0.25 + 16)
+    ctx.fillText('P2', center + 6, center - radius * 0.5 + 16)
+    ctx.fillText('P3', center + 6, center - radius * 0.75 + 16)
+    // Sweep wedge
+    const gradient = ctx.createConicGradient ? ctx.createConicGradient(sweep - 0.9, center, center) : null
+    if (gradient) {
+      gradient.addColorStop(0, 'rgba(0,0,0,0)')
+      gradient.addColorStop(0.14, signal + '55')
+      gradient.addColorStop(0.1433, 'rgba(0,0,0,0)')
+      ctx.fillStyle = gradient
+      ctx.beginPath(); ctx.moveTo(center, center); ctx.arc(center, center, radius, sweep - 0.9, sweep); ctx.closePath(); ctx.fill()
+    }
+    ctx.strokeStyle = signal
+    ctx.lineWidth = 2
+    ctx.beginPath(); ctx.moveTo(center, center); ctx.lineTo(center + Math.cos(sweep) * radius, center + Math.sin(sweep) * radius); ctx.stroke()
+    // Offers fade after the sweep passes them
+    for (const blip of blips) {
+      const distance = radius * (1 - blip.score / 100) + 18
+      const x = center + Math.cos(blip.angle) * distance
+      const y = center + Math.sin(blip.angle) * distance
+      const behind = ((sweep - blip.angle) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2)
+      const glow = still ? 0.9 : Math.max(0.18, 1 - behind / (Math.PI * 1.6))
+      ctx.globalAlpha = glow
+      ctx.fillStyle = blip.score >= 75 ? signal : text
+      ctx.beginPath(); ctx.arc(x, y, blip.score >= 75 ? 6 : 4, 0, Math.PI * 2); ctx.fill()
+      if (blip.label) {
+        ctx.fillStyle = text
+        ctx.font = '500 15px "IBM Plex Sans", sans-serif'
+        const right = x < center + radius * 0.35
+        ctx.textAlign = right ? 'left' : 'right'
+        ctx.fillText(blip.label, x + (right ? 12 : -12), y + 5)
+        ctx.textAlign = 'left'
+      }
+      ctx.globalAlpha = 1
+    }
+    if (!still) {
+      sweep = (sweep + (now - last) * 0.0009) % (Math.PI * 2)
+      last = now
+      requestAnimationFrame(draw)
+    }
+  }
+  requestAnimationFrame((now) => { last = now; draw(now) })
+})()
+</script>
+
+</body>
+</html>
