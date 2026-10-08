@@ -8,7 +8,7 @@ Market Radar surveille les sites carrière de 40 grandes entreprises, classe les
 prépare un CV et une lettre adaptés avec une IA locale, remplit les formulaires des portails de recrutement
 et suit les réponses dans ta boîte mail. Rien ne sort de ton serveur. Rien n'est envoyé sans ton clic.
 
-[Page de présentation](docs/index.html) · [Installer](#installer) · [Guide pour agent IA](READMELLM.md) · [Licence MIT](LICENSE)
+[Page de présentation](https://simonw31.github.io/market-radar/) · [Installer](#installer) · [Guide pour agent IA](READMELLM.md) · [Licence MIT](LICENSE)
 
 </div>
 

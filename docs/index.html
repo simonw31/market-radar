@@ -205,7 +205,7 @@ footer { border-top: 1px solid var(--line); padding-block: 28px 40px; color: var
       </ul>
     </div>
     <figure class="scope" aria-label="Radar animé : des offres apparaissent à mesure que le balayage passe">
-      <canvas id="radar" width="560" height="560"></canvas>
+      <canvas id="radar" width="360" height="360"></canvas>
       <figcaption><span>Illustration · offres classées P1 au centre</span><span id="sweep-count">balayage</span></figcaption>
     </figure>
   </header>
@@ -451,10 +451,21 @@ du dépôt https://github.com/simonw31/market-radar</pre><button class="copy" ty
   ]
   let sweep = 0.8
   let last = performance.now()
+  // Draw at the displayed size so labels stay readable on every screen.
+  function fit() {
+    const ratio = window.devicePixelRatio || 1
+    const width = Math.round(canvas.getBoundingClientRect().width) || 360
+    if (canvas.width !== Math.round(width * ratio)) {
+      canvas.width = canvas.height = Math.round(width * ratio)
+    }
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0)
+    return width
+  }
   function draw(now) {
-    const size = canvas.width
+    const size = fit()
     const center = size / 2
-    const radius = center - 22
+    const radius = center - 10
+    const label = Math.max(11, Math.min(13, size / 34))
     const ring = css('--scope-ring') || '#2a4462'
     const text = css('--scope-text') || '#b9c9da'
     const signal = css('--signal') || '#ff8b52'
@@ -471,10 +482,10 @@ du dépôt https://github.com/simonw31/market-radar</pre><button class="copy" ty
     ctx.moveTo(center, center - radius); ctx.lineTo(center, center + radius)
     ctx.stroke()
     ctx.fillStyle = text
-    ctx.font = '500 15px "IBM Plex Mono", monospace'
-    ctx.fillText('P1', center + 6, center - radius * 0.25 + 16)
-    ctx.fillText('P2', center + 6, center - radius * 0.5 + 16)
-    ctx.fillText('P3', center + 6, center - radius * 0.75 + 16)
+    ctx.font = `500 ${label}px "IBM Plex Mono", monospace`
+    ctx.fillText('P1', center + 5, center - radius * 0.25 + label + 2)
+    ctx.fillText('P2', center + 5, center - radius * 0.5 + label + 2)
+    ctx.fillText('P3', center + 5, center - radius * 0.75 + label + 2)
     // Sweep wedge
     const gradient = ctx.createConicGradient ? ctx.createConicGradient(sweep - 0.9, center, center) : null
     if (gradient) {
@@ -489,20 +500,20 @@ du dépôt https://github.com/simonw31/market-radar</pre><button class="copy" ty
     ctx.beginPath(); ctx.moveTo(center, center); ctx.lineTo(center + Math.cos(sweep) * radius, center + Math.sin(sweep) * radius); ctx.stroke()
     // Offers fade after the sweep passes them
     for (const blip of blips) {
-      const distance = radius * (1 - blip.score / 100) + 18
+      const distance = radius * (1 - blip.score / 100) + radius * 0.06
       const x = center + Math.cos(blip.angle) * distance
       const y = center + Math.sin(blip.angle) * distance
       const behind = ((sweep - blip.angle) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2)
       const glow = still ? 0.9 : Math.max(0.18, 1 - behind / (Math.PI * 1.6))
       ctx.globalAlpha = glow
       ctx.fillStyle = blip.score >= 75 ? signal : text
-      ctx.beginPath(); ctx.arc(x, y, blip.score >= 75 ? 6 : 4, 0, Math.PI * 2); ctx.fill()
+      ctx.beginPath(); ctx.arc(x, y, blip.score >= 75 ? 4.5 : 3, 0, Math.PI * 2); ctx.fill()
       if (blip.label) {
         ctx.fillStyle = text
-        ctx.font = '500 15px "IBM Plex Sans", sans-serif'
-        const right = x < center + radius * 0.35
+        ctx.font = `500 ${label}px "IBM Plex Sans", sans-serif`
+        const right = x < center + radius * 0.2
         ctx.textAlign = right ? 'left' : 'right'
-        ctx.fillText(blip.label, x + (right ? 12 : -12), y + 5)
+        ctx.fillText(blip.label, x + (right ? 9 : -9), y + label / 3)
         ctx.textAlign = 'left'
       }
       ctx.globalAlpha = 1
