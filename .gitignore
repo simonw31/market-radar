@@ -1,0 +1,25 @@
+# Dependencies and builds
+node_modules
+dist
+dist-ssr
+.output
+.nitro
+.tanstack
+.vinxi
+.wrangler
+__unconfig*
+
+# Secrets and personal data: never commit them
+.env
+.env.*
+!env.example
+*.local
+backups/
+*.zip
+
+# OS / editors
+.DS_Store
+.vscode
+.idea
+todos.json
+npm-debug.log*

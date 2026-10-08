@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">MR</div>
+    <div>
+      <div class="title">Market Radar</div>
+      <div class="muted" id="status">Connexion au serveur…</div>
+    </div>
+  </header>
+
+  <section>
+    <label for="application">Candidature validée</label>
+    <select id="application"><option>Chargement…</option></select>
+    <button id="fill" class="primary">Remplir cette page</button>
+    <p class="muted small">Depuis « Postuler sur le site » dans Market Radar, tout se fait seul sur Workday, Talentsoft (CA-CIB, Amundi, Safran…), SmartRecruiters, et en mode générique sur Taleo, SuccessFactors, TalentLink, iCIMS, Avature. Ici, pour forcer le remplissage d’une autre page. Rien n’est jamais envoyé à ta place.</p>
+  </section>
+
+  <details id="settings">
+    <summary>Réglages</summary>
+    <label for="server">Serveur Convex (port 3210)</label>
+    <input id="server" placeholder="http://192.168.1.10:3210" />
+    <label for="app">Application web (port 3100)</label>
+    <input id="app" placeholder="http://192.168.1.10:3100" />
+    <label class="check"><input type="checkbox" id="autoAdvance" /> Passer automatiquement les étapes intermédiaires (« Suivant »)</label>
+    <button id="save">Enregistrer</button>
+  </details>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+{
+  "manifest_version": 3,
+  "name": "Market Radar · Postuler",
+  "short_name": "Market Radar",
+  "version": "1.2.0",
+  "description": "Remplit les formulaires de candidature (Workday, Talentsoft, SmartRecruiters, Taleo, SuccessFactors…) avec ton CV et ta lettre validés dans Market Radar. N’envoie jamais rien à ta place.",
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/16.png",
+      "48": "icons/48.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "clipboardWrite",
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://localhost/*",
+    "https://jobs.smartrecruiters.com/*",
+    "https://jobs.ca-cib.com/*",
+    "https://*.myworkdayjobs.com/*",
+    "https://*.myworkdaysite.com/*",
+    "https://jobs.groupe-psa.com/*",
+    "https://www.jobs.amundi.com/*",
+    "https://*.profils.org/*",
+    "https://*.talent-soft.com/*",
+    "https://jobs.vinci.com/*",
+    "https://careers.capgemini.com/*",
+    "https://*.successfactors.com/*",
+    "https://*.successfactors.eu/*",
+    "https://*.sapsf.com/*",
+    "https://*.sapsf.eu/*",
+    "https://*.recruitmentplatform.com/*",
+    "https://emplois.kpmg.fr/*",
+    "https://*.taleo.net/*",
+    "https://talentacquisition.3ds.com/*",
+    "https://*.oraclecloud.com/*",
+    "https://higher.gs.com/*",
+    "https://*.icims.com/*",
+    "https://*.avature.net/*",
+    "https://careers.loreal.com/*",
+    "https://careers.se.com/*",
+    "https://careers.societegenerale.com/*",
+    "https://www.3ds.com/*"
+  ],
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://jobs.smartrecruiters.com/*",
+        "https://jobs.ca-cib.com/*",
+        "https://*.myworkdayjobs.com/*",
+        "https://*.myworkdaysite.com/*",
+        "https://jobs.groupe-psa.com/*",
+        "https://www.jobs.amundi.com/*",
+        "https://*.profils.org/*",
+        "https://*.talent-soft.com/*",
+        "https://jobs.vinci.com/*",
+        "https://careers.capgemini.com/*",
+        "https://*.successfactors.com/*",
+        "https://*.successfactors.eu/*",
+        "https://*.sapsf.com/*",
+        "https://*.sapsf.eu/*",
+        "https://*.recruitmentplatform.com/*",
+        "https://emplois.kpmg.fr/*",
+        "https://*.taleo.net/*",
+        "https://talentacquisition.3ds.com/*",
+        "https://*.oraclecloud.com/*",
+        "https://higher.gs.com/*",
+        "https://*.icims.com/*",
+        "https://*.avature.net/*",
+        "https://careers.loreal.com/*",
+        "https://careers.se.com/*",
+        "https://careers.societegenerale.com/*",
+        "https://www.3ds.com/careers/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "http://localhost/*",
+        "http://127.0.0.1/*"
+      ],
+      "js": [
+        "app-bridge.js"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}
