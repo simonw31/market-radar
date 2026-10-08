@@ -1,0 +1,115 @@
+# Market Radar: everything runs on your own machine.
+# Settings come from .env (copy .env.example, or run ./install.sh).
+#
+#   web      → the app            http://<host>:3100
+#   backend  → Convex (database)  http://<host>:3210
+#   worker   → collection, local AI, PDFs, emails (no exposed port)
+#   ollama   → local language model (bound to 127.0.0.1 only)
+#
+# BIND_ADDRESS limits who can reach the ports. The app has no user accounts:
+# on a VPS, use 127.0.0.1 (+ SSH tunnel) or your Tailscale/WireGuard IP.
+
+services:
+  backend:
+    image: ghcr.io/get-convex/convex-backend:latest
+    container_name: market-radar-convex
+    restart: unless-stopped
+    stop_grace_period: 10s
+    stop_signal: SIGINT
+    ports:
+      - '${BIND_ADDRESS:-0.0.0.0}:3210:3210'
+      - '${BIND_ADDRESS:-0.0.0.0}:3211:3211'
+    volumes:
+      - convex-data:/convex/data
+    environment:
+      INSTANCE_NAME: ${CONVEX_INSTANCE_NAME:-}
+      INSTANCE_SECRET: ${CONVEX_INSTANCE_SECRET:-}
+      CONVEX_CLOUD_ORIGIN: ${CONVEX_PUBLIC_URL:-http://localhost:3210}
+      CONVEX_SITE_ORIGIN: ${CONVEX_SITE_URL:-http://localhost:3211}
+      DISABLE_METRICS_ENDPOINT: 'true'
+      DOCUMENT_RETENTION_DELAY: '172800'
+      RUST_LOG: info
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3210/version']
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+
+  dashboard:
+    image: ghcr.io/get-convex/convex-dashboard:latest
+    container_name: market-radar-convex-dashboard
+    restart: unless-stopped
+    ports:
+      - '${BIND_ADDRESS:-0.0.0.0}:6791:6791'
+    environment:
+      NEXT_PUBLIC_DEPLOYMENT_URL: ${CONVEX_PUBLIC_URL:-http://localhost:3210}
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      target: web
+      args:
+        # Baked into the browser bundle: the address YOUR browser uses to reach Convex.
+        VITE_CONVEX_URL: ${CONVEX_PUBLIC_URL:-http://localhost:3210}
+    container_name: market-radar-web
+    restart: unless-stopped
+    ports:
+      - '${BIND_ADDRESS:-0.0.0.0}:3100:3000'
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: .
+      target: worker
+    container_name: market-radar-worker
+    restart: unless-stopped
+    environment:
+      CONVEX_URL: http://backend:3210
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3.5:4b}
+      APP_PUBLIC_URL: ${APP_PUBLIC_URL:-http://localhost:3100}
+      # Weekly/daily watch reports (never job applications)
+      REPORT_EMAIL_ENABLED: ${REPORT_EMAIL_ENABLED:-false}
+      REPORT_EMAIL_TO: ${REPORT_EMAIL_TO:-}
+      REPORT_EMAIL_FROM: ${REPORT_EMAIL_FROM:-}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      # Read-only inbox watcher (application replies → tracking tab)
+      INBOX_WATCH_ENABLED: ${INBOX_WATCH_ENABLED:-true}
+      IMAP_HOST: ${IMAP_HOST:-}
+      IMAP_PORT: ${IMAP_PORT:-993}
+      IMAP_USER: ${IMAP_USER:-}
+      IMAP_PASS: ${IMAP_PASS:-}
+      TZ: ${TZ:-Europe/Paris}
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: market-radar-ollama
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:11434:11434'
+    volumes:
+      - ollama-data:/root/.ollama
+    environment:
+      OLLAMA_CONTEXT_LENGTH: '4096'
+      OLLAMA_KEEP_ALIVE: '5m'
+      OLLAMA_MAX_LOADED_MODELS: '1'
+      OLLAMA_NUM_PARALLEL: '1'
+
+volumes:
+  convex-data:
+    name: market-radar-convex-data
+  ollama-data:
+    name: market-radar-ollama-data
