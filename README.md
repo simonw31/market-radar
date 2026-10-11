@@ -8,7 +8,13 @@ Market Radar surveille les sites carrière de 42 grandes entreprises, classe les
 prépare un CV et une lettre adaptés avec une IA locale, remplit les formulaires des portails de recrutement
 et suit les réponses dans ta boîte mail. Rien ne sort de ton serveur. Rien n'est envoyé sans ton clic.
 
-[Page de présentation](https://simonw31.github.io/market-radar/) · [Installer](#installer) · [Guide pour agent IA](READMELLM.md) · [Licence MIT](LICENSE)
+[Page de présentation](https://simonw31.github.io/market-radar/) · [Visite guidée](#visite-guidée) · [Installer](#installer) · [Guide pour agent IA](READMELLM.md) · [Licence MIT](LICENSE)
+
+<br>
+
+<img src="docs/screenshots/radar.png" alt="Le radar : offres classées par score pour le profil Camille · Data & IT" width="900">
+
+<sub>Captures faites sur une installation de démonstration : profils et CV fictifs, offres réelles et publiques.</sub>
 
 </div>
 
@@ -25,6 +31,56 @@ et suit les réponses dans ta boîte mail. Rien ne sort de ton serveur. Rien n'e
 | **Extension Chrome** | Sur Workday, Talentsoft, SmartRecruiters et en mode générique sur Taleo, SuccessFactors, TalentLink, iCIMS ou Avature : connexion, remplissage, CV et lettre joints. Elle s'arrête toujours avant le bouton « Envoyer ». |
 | **Suivi** | Un tableau de toutes tes candidatures (envoyée, test, entretien, offre, refus) avec relances et export CSV. Un lecteur de boîte mail en lecture seule met les statuts à jour quand un recruteur répond. |
 | **Barre des tâches** | Collectes, générations et envois en cours apparaissent en bas à droite avec leur progression. |
+
+## Visite guidée
+
+### Le radar et la fiche d'une offre
+Toutes les offres actives, classées par score pour le profil choisi. La fiche montre le détail du score, les mots-clés qui correspondent, les compétences détectées et la description complète, avec « Préparer la candidature ».
+
+<img src="docs/screenshots/offre.png" alt="Fiche d'une offre ouverte depuis le radar" width="900">
+
+### Une candidature préparée en local
+L'IA locale repère les missions de l'offre, choisit les paragraphes de ta bibliothèque et les lignes de ton CV à mettre en avant. La date de début et la durée sont lues dans l'annonce, ou signalées quand elles manquent.
+
+<img src="docs/screenshots/candidature.png" alt="Candidature préparée : choix de l'IA, calendrier, boutons" width="900">
+
+La lettre reste modifiable paragraphe par paragraphe avant de régénérer les PDF.
+
+<img src="docs/screenshots/lettre.png" alt="Éditeur de la lettre de motivation" width="900">
+
+### Les PDF générés
+Un CV sobre au format finance et une lettre en trois temps (vous, moi, nous), rendus avec Typst et nommés pour le poste.
+
+<p align="center">
+  <img src="docs/screenshots/pdf-cv.png" alt="CV généré" width="440">
+  <img src="docs/screenshots/pdf-lettre.png" alt="Lettre générée" width="440">
+</p>
+
+### Le suivi
+Toutes les candidatures envoyées, leurs statuts, les relances et l'export pour Excel. Les réponses des recruteurs mettent les statuts à jour toutes seules.
+
+<img src="docs/screenshots/suivi.png" alt="Tableau de suivi des candidatures" width="900">
+
+### Les profils
+Chaque personne a ses critères, son rapport et son CV maître, vérifié une fois puis réutilisé pour toutes les candidatures.
+
+<img src="docs/screenshots/profils.png" alt="Réglages d'un profil" width="900">
+
+<img src="docs/screenshots/cv.png" alt="CV validé, bibliothèque de lettre et critères de recherche" width="900">
+
+### La collecte
+Le worker visite les sites carrière, normalise et score les offres en direct, source par source.
+
+<img src="docs/screenshots/collecte.png" alt="Suivi en direct de la collecte" width="900">
+
+### Le workflow
+Le parcours d'une candidature, de l'annonce à la relance, avec les étapes qui demandent ta validation.
+
+<img src="docs/screenshots/workflow.png" alt="Workflow de candidature" width="900">
+
+### En mode sombre
+
+<img src="docs/screenshots/radar-sombre.png" alt="Le radar en mode sombre pour un profil Front Office CDI" width="900">
 
 ## Garde-fous
 

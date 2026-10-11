@@ -350,7 +350,8 @@ function ApplicationDetail({ id }: { id: Id<"applications"> }) {
 							<ul className="list-inside list-disc space-y-0.5">
 								{highlighted.map((bullet) => (
 									<li key={bullet.id} className="line-clamp-1">
-										{bullet.text}
+										{/* The CV marks bold words with **…**: shown as plain text here. */}
+										{bullet.text.replaceAll("**", "")}
 									</li>
 								))}
 								{highlighted.length === 0 && <li>Ordre du CV conservé</li>}
