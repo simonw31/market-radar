@@ -1,10 +1,18 @@
 import { isStudentOpportunity } from './scrape-ca-cib'
 
-export type CollectionProfile = { enabled: boolean; contractTypes: string[]; targetKeywords: string[] }
+export type CollectionProfile = { enabled: boolean; contractTypes: string[]; targetKeywords: string[]; marketFocus?: string }
 
 let permanentWanted = false
 let permanentKeywords: string[] = []
 let permanentMatchers: RegExp[] = []
+let supportFrontWanted = false
+
+// "Support front" CDI roles (market operations, collateral, onboarding, legal…):
+// their titles vary too much for a short keyword list, so a CDI profile aimed
+// at them ("Cible marchés : support") collects every title of this family.
+// Tested on normalized titles (no accents, lowercase, single spaces).
+const SUPPORT_FRONT_TITLE =
+  / (front|middle|back) ?office | collat[a-z]* | kyc | aml | onboarding | transaction management | agency | trade (support|finance) | settlements? | confirmations? | client services? | coverage | business (manager|support) | (sales|trading) (assistant|support) | gmd | gmi | markets? | marches? | juriste | legal | compliance | conformite | credit limits? | limites? de credit | documentation juridique | isda | static data | referentiel /
 
 function normalize(value: string) {
   return value
@@ -37,6 +45,7 @@ export function setCollectionProfiles(profiles: CollectionProfile[]) {
   permanentWanted = permanentProfiles.length > 0
   permanentKeywords = [...keywords.values()]
   permanentMatchers = [...keywords.keys()].map(keywordMatcher)
+  supportFrontWanted = permanentProfiles.some((profile) => profile.marketFocus === 'support')
 }
 
 /** True when at least one enabled profile asks for CDI. */
@@ -45,8 +54,8 @@ export function wantsPermanent() {
 }
 
 export function permanentTitleMatch(title: string) {
-  if (!permanentMatchers.length) return false
   const haystack = ` ${normalize(title)} `
+  if (supportFrontWanted && SUPPORT_FRONT_TITLE.test(haystack)) return true
   return permanentMatchers.some((matcher) => matcher.test(haystack))
 }
 
