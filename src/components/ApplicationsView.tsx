@@ -822,7 +822,7 @@ function EmailSection({
 }
 
 /** Version of extension/manifest.json: an older one asks for a reload. */
-const EXTENSION_VERSION = "1.2.0";
+const EXTENSION_VERSION = "1.2.1";
 const CONVEX_URL = import.meta.env.VITE_CONVEX_URL ?? "http://<serveur>:3210";
 
 /** Tells whether the Chrome extension is installed (it marks <html>). */

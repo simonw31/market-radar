@@ -3,6 +3,7 @@
 export const sourceDirectory: Array<{ key: string; name: string; sector: string; url: string; unavailable?: string }> = [
   { key: 'ca-cib', name: 'Crédit Agricole CIB', sector: 'Banque & Marchés', url: 'https://jobs.ca-cib.com/offre-de-emploi/liste-offres.aspx' },
   { key: 'societe-generale', name: 'Société Générale', sector: 'Banque & Marchés', url: 'https://careers.societegenerale.com/fr/Technical/toutes-les-offres' },
+  { key: 'natixis', name: 'Natixis', sector: 'Banque & Marchés', url: 'https://recrutement.bpce.fr/offres-emploi' },
   { key: 'jpmorgan', name: 'J.P. Morgan', sector: 'Banque & Marchés', url: 'https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1002/jobs' },
   { key: 'goldman-sachs', name: 'Goldman Sachs', sector: 'Banque & Marchés', url: 'https://higher.gs.com/campus' },
   { key: 'amundi', name: 'Amundi', sector: 'Asset Management', url: 'https://www.jobs.amundi.com/Pages/Offre/listeoffre.aspx' },
@@ -18,7 +19,7 @@ export const sourceDirectory: Array<{ key: string; name: string; sector: string;
   { key: 'salesforce', name: 'Salesforce', sector: 'Big Tech', url: 'https://salesforce.wd12.myworkdayjobs.com/External_Career_Site' },
   { key: 'adobe', name: 'Adobe', sector: 'Big Tech', url: 'https://adobe.wd5.myworkdayjobs.com/external_experienced' },
   { key: 'ubisoft', name: 'Ubisoft', sector: 'Tech', url: 'https://careers.smartrecruiters.com/Ubisoft2' },
-  { key: 'bnp-paribas', name: 'BNP Paribas', sector: 'Banque & Marchés', url: 'https://group.bnpparibas/emploi-carriere/toutes-offres-emploi', unavailable: 'Protection Akamai : connexion serveur à finaliser' },
+  { key: 'bnp-paribas', name: 'BNP Paribas', sector: 'Banque & Marchés', url: 'https://group.bnpparibas/emploi-carriere/toutes-offres-emploi' },
   { key: 'capgemini', name: 'Capgemini', sector: 'Conseil & ESN', url: 'https://www.capgemini.com/fr-fr/carrieres/' },
   { key: 'accenture', name: 'Accenture', sector: 'Big 5 · Conseil', url: 'https://www.accenture.com/fr-fr/careers/jobsearch' },
   { key: 'deloitte', name: 'Deloitte', sector: 'Big 5 · Conseil', url: 'https://www.deloitte.com/fr/fr/careers.html' },

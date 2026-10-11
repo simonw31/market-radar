@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Market Radar · Postuler",
   "short_name": "Market Radar",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Remplit les formulaires de candidature (Workday, Talentsoft, SmartRecruiters, Taleo, SuccessFactors…) avec ton CV et ta lettre validés dans Market Radar. N’envoie jamais rien à ta place.",
   "icons": {
     "16": "icons/16.png",
@@ -53,7 +53,9 @@
     "https://careers.loreal.com/*",
     "https://careers.se.com/*",
     "https://careers.societegenerale.com/*",
-    "https://www.3ds.com/*"
+    "https://www.3ds.com/*",
+    "https://recrutement.bpce.fr/*",
+    "https://group.bnpparibas/*"
   ],
   "optional_host_permissions": [
     "http://*/*",
@@ -87,7 +89,9 @@
         "https://careers.loreal.com/*",
         "https://careers.se.com/*",
         "https://careers.societegenerale.com/*",
-        "https://www.3ds.com/careers/*"
+        "https://www.3ds.com/careers/*",
+        "https://recrutement.bpce.fr/*",
+        "https://group.bnpparibas/*"
       ],
       "js": [
         "content.js"

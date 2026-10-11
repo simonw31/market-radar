@@ -1,5 +1,6 @@
 import { scrapeAmundi } from './scrape-amundi'
 import { scrapeAmazon } from './scrape-amazon'
+import { scrapeBnpParibas } from './scrape-bnp-paribas'
 import { avatureSources, scrapeAvature } from './scrape-avature'
 import { scrapeCaCib } from './scrape-ca-cib'
 import { scrapeCapgemini } from './scrape-capgemini'
@@ -10,6 +11,7 @@ import { scrapeJpmorgan } from './scrape-jpmorgan'
 import { scrapeKpmg } from './scrape-kpmg'
 import { scrapeLvmh } from './scrape-lvmh'
 import { scrapeMicrosoft } from './scrape-microsoft'
+import { scrapeNatixis } from './scrape-natixis'
 import { scrapeOrange } from './scrape-orange'
 import { scrapePublicis } from './scrape-publicis'
 import { scrapeSafran } from './scrape-safran'
@@ -24,6 +26,8 @@ import { scrapeWorkday, workdaySources } from './scrape-workday'
 const rawSources = [
   ['CA-CIB', scrapeCaCib],
   ['Société Générale', scrapeSocieteGenerale],
+  ['BNP Paribas', scrapeBnpParibas],
+  ['Natixis', scrapeNatixis],
   ['J.P. Morgan', scrapeJpmorgan],
   ['Goldman Sachs', scrapeGoldmanSachs],
   ['Amundi', scrapeAmundi],
