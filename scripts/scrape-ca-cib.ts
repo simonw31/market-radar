@@ -50,13 +50,22 @@ export function clean(value: string | undefined) {
   return (value ?? '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim()
 }
 
-async function fetchHtml(url: string) {
-  const response = await fetch(url, {
-    headers: { 'user-agent': USER_AGENT, accept: 'text/html' },
-    signal: AbortSignal.timeout(20_000),
-  })
-  if (!response.ok) throw new Error(`${response.status} while fetching ${url}`)
-  return await response.text()
+// The site gets slow under load: a page that times out is retried (3 tries,
+// growing delay) instead of failing the whole source.
+async function fetchHtml(url: string, attempts = 3) {
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: { 'user-agent': USER_AGENT, accept: 'text/html' },
+        signal: AbortSignal.timeout(30_000),
+      })
+      if (!response.ok) throw new Error(`${response.status} while fetching ${url}`)
+      return await response.text()
+    } catch (error) {
+      if (attempt >= attempts) throw error
+      await new Promise((resolve) => setTimeout(resolve, 2_000 * attempt))
+    }
+  }
 }
 
 function inferService(text: string, fallback: string) {
@@ -231,7 +240,7 @@ export async function scrapeCaCib() {
 
   try {
     const listings = await readListings()
-    const jobs = await mapWithConcurrency(listings, 5, readDetails)
+    const jobs = await mapWithConcurrency(listings, 3, readDetails)
     for (let index = 0; index < jobs.length; index += 20) {
       const batch = jobs.slice(index, index + 20).map((job) => ({ ...job, description: job.description.slice(0, 3500) }))
       await withWriteRetry(() => client.mutation(api.jobs.upsertBatch, { jobs: batch, seenAt }))
