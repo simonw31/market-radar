@@ -1,4 +1,5 @@
 import { scrapeAmundi } from './scrape-amundi'
+import { scrapeAxa } from './scrape-axa'
 import { scrapeAmazon } from './scrape-amazon'
 import { scrapeBnpParibas } from './scrape-bnp-paribas'
 import { avatureSources, scrapeAvature } from './scrape-avature'
@@ -12,6 +13,7 @@ import { scrapeKpmg } from './scrape-kpmg'
 import { scrapeLvmh } from './scrape-lvmh'
 import { scrapeMicrosoft } from './scrape-microsoft'
 import { scrapeNatixis } from './scrape-natixis'
+import { oracleSources, scrapeOracle } from './scrape-oracle'
 import { scrapeOrange } from './scrape-orange'
 import { scrapePublicis } from './scrape-publicis'
 import { scrapeSafran } from './scrape-safran'
@@ -28,6 +30,7 @@ const rawSources = [
   ['Société Générale', scrapeSocieteGenerale],
   ['BNP Paribas', scrapeBnpParibas],
   ['Natixis', scrapeNatixis],
+  ['AXA', scrapeAxa],
   ['J.P. Morgan', scrapeJpmorgan],
   ['Goldman Sachs', scrapeGoldmanSachs],
   ['Amundi', scrapeAmundi],
@@ -49,6 +52,7 @@ const rawSources = [
     (source) => [source.name, () => scrapeSmartRecruiter(source)] as const,
   ),
   ...workdaySources.map((source) => [source.name, () => scrapeWorkday(source)] as const),
+  ...oracleSources.map((source) => [source.name, () => scrapeOracle(source)] as const),
   ...successFactorsSources.map(
     (source) => [source.name, () => scrapeSuccessFactors(source)] as const,
   ),

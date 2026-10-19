@@ -94,6 +94,41 @@ export const workdaySources = [
     baseUrl: 'https://thales.wd3.myworkdayjobs.com/wday/cxs/thales/Careers',
     publicUrl: 'https://thales.wd3.myworkdayjobs.com/Careers',
   },
+  {
+    key: 'air-liquide',
+    name: 'Air Liquide',
+    sector: 'CAC 40 · Industrie',
+    baseUrl: 'https://airliquidehr.wd3.myworkdayjobs.com/wday/cxs/airliquidehr/AirLiquideExternalCareer',
+    publicUrl: 'https://airliquidehr.wd3.myworkdayjobs.com/AirLiquideExternalCareer',
+  },
+  {
+    key: 'edenred',
+    name: 'Edenred',
+    sector: 'CAC 40 · Services & Fintech',
+    baseUrl: 'https://edenpeople.wd3.myworkdayjobs.com/wday/cxs/edenpeople/Edenred_Careers',
+    publicUrl: 'https://edenpeople.wd3.myworkdayjobs.com/Edenred_Careers',
+  },
+  {
+    key: 'michelin',
+    name: 'Michelin',
+    sector: 'CAC 40 · Industrie',
+    baseUrl: 'https://michelinhr.wd3.myworkdayjobs.com/wday/cxs/michelinhr/Michelin',
+    publicUrl: 'https://michelinhr.wd3.myworkdayjobs.com/Michelin',
+  },
+  {
+    key: 'pernod-ricard',
+    name: 'Pernod Ricard',
+    sector: 'CAC 40 · Consommation',
+    baseUrl: 'https://pernodricard.wd3.myworkdayjobs.com/wday/cxs/pernodricard/pernod-ricard',
+    publicUrl: 'https://pernodricard.wd3.myworkdayjobs.com/pernod-ricard',
+  },
+  {
+    key: 'urw',
+    name: 'Unibail-Rodamco-Westfield',
+    sector: 'CAC 40 · Immobilier',
+    baseUrl: 'https://urw.wd3.myworkdayjobs.com/wday/cxs/urw/urw_career_site',
+    publicUrl: 'https://urw.wd3.myworkdayjobs.com/urw_career_site',
+  },
 ] as const
 
 type Config = (typeof workdaySources)[number]

@@ -21,6 +21,10 @@ export const successFactorsSources = [
     sector: 'CAC 40 · Énergie & Tech',
     baseUrl: 'https://jobs.engie.com',
   },
+  { key: 'essilorluxottica', name: 'EssilorLuxottica', sector: 'CAC 40 · Santé & Optique', baseUrl: 'https://careers.essilorluxottica.com' },
+  { key: 'bureau-veritas', name: 'Bureau Veritas', sector: 'CAC 40 · Services', baseUrl: 'https://careers.bureauveritas.com' },
+  { key: 'bouygues-construction', name: 'Bouygues Construction', sector: 'CAC 40 · Construction', baseUrl: 'https://careers.bouygues-construction.com' },
+  { key: 'bouygues-telecom', name: 'Bouygues Telecom', sector: 'CAC 40 · Télécoms', baseUrl: 'https://careers.bouyguestelecom.fr' },
 ] as const
 
 type Config = (typeof successFactorsSources)[number]

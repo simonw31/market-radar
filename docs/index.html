@@ -193,13 +193,13 @@ footer { border-top: 1px solid var(--line); padding-block: 28px 40px; color: var
       <div class="eyebrow">Logiciel libre · auto-hébergé · licence MIT</div>
       <h1>Market Radar</h1>
       <p class="lead">Ta veille emploi et tes candidatures, sur ta propre machine.</p>
-      <p class="body">Il surveille les sites carrière de 42 grandes entreprises, classe chaque offre selon ton profil, prépare un CV et une lettre adaptés avec une IA locale, remplit les portails de recrutement et suit les réponses dans ta boîte mail. Tu gardes la main sur chaque envoi.</p>
+      <p class="body">Il surveille les sites carrière de 56 grandes entreprises, classe chaque offre selon ton profil, prépare un CV et une lettre adaptés avec une IA locale, remplit les portails de recrutement et suit les réponses dans ta boîte mail. Tu gardes la main sur chaque envoi.</p>
       <div class="actions">
         <a class="btn primary" href="#installer">Installer en une commande</a>
         <a class="btn" href="https://github.com/simonw31/market-radar">Voir le code</a>
       </div>
       <ul class="facts">
-        <li><b>42</b>sites carrière suivis</li>
+        <li><b>56</b>sites carrière suivis</li>
         <li><b>0</b>clé d'API, 0 abonnement</li>
         <li><b>~80 s</b>pour un CV et une lettre</li>
       </ul>
@@ -255,7 +255,7 @@ footer { border-top: 1px solid var(--line); padding-block: 28px 40px; color: var
         <div class="glimpse">
           <div class="mock" aria-label="Exemple de barre des tâches">
             <div class="row"><b>Collecte des offres</b><span class="pill">12 s</span></div>
-            <div class="co">9 / 42 sources · Thales</div>
+            <div class="co">9 / 56 sources · Thales</div>
             <div class="meter"><i></i></div>
             <div class="row"><span>Candidature · Business Analyst</span><span class="status ok">PDF prêts</span></div>
           </div>
@@ -356,7 +356,7 @@ du dépôt https://github.com/simonw31/market-radar</pre><button class="copy" ty
   <div class="wrap sec">
     <header><div class="label">Sources</div></header>
     <div>
-      <h2>42 sites carrière au départ</h2>
+      <h2>56 sites carrière au départ</h2>
       <p class="intro">Banque, conseil, industrie, tech. Un nouveau site se branche en quelques dizaines de lignes, souvent en réutilisant un connecteur Workday ou SmartRecruiters existant.</p>
       <div class="chips" id="chips"></div>
     </div>
@@ -386,7 +386,7 @@ du dépôt https://github.com/simonw31/market-radar</pre><button class="copy" ty
 <script>
 (() => {
   // --- Sources
-  const sources = ['Crédit Agricole CIB', 'Société Générale', 'BNP Paribas', 'Natixis', 'J.P. Morgan', 'Goldman Sachs', 'Amundi', 'Wavestone', 'Sopra Steria', 'Devoteam', 'Talan', 'Capgemini', 'Accenture', 'Deloitte', 'EY', 'KPMG', 'PwC', 'Airbus', 'Thales', 'Safran', 'Dassault Systèmes', 'Schneider Electric', 'Renault Group', 'Stellantis', 'Bosch', 'Eiffage', 'VINCI', 'Veolia', 'TotalEnergies', 'ENGIE', 'Sanofi', 'LVMH', 'Orange', 'Publicis Groupe', 'Ubisoft', 'Google', 'Microsoft', 'Amazon / AWS', 'NVIDIA', 'Salesforce', 'Adobe']
+  const sources = ['Crédit Agricole CIB', 'Société Générale', 'BNP Paribas', 'Natixis', 'J.P. Morgan', 'Goldman Sachs', 'Amundi', 'Wavestone', 'Sopra Steria', 'Devoteam', 'Talan', 'Capgemini', 'Accenture', 'Deloitte', 'EY', 'KPMG', 'PwC', 'Airbus', 'Thales', 'Safran', 'Dassault Systèmes', 'Schneider Electric', 'Renault Group', 'Stellantis', 'Bosch', 'Eiffage', 'VINCI', 'Veolia', 'TotalEnergies', 'ENGIE', 'Sanofi', 'AXA', 'Air Liquide', 'Michelin', 'Pernod Ricard', 'Accor', 'Edenred', 'EssilorLuxottica', 'Eurofins', 'Bureau Veritas', 'Bouygues', 'ArcelorMittal', 'Legrand', 'Unibail-Rodamco-Westfield', 'LVMH', 'Orange', 'Publicis Groupe', 'Ubisoft', 'Google', 'Microsoft', 'Amazon / AWS', 'NVIDIA', 'Salesforce', 'Adobe']
   const chips = document.getElementById('chips')
   for (const name of sources) {
     const span = document.createElement('span')

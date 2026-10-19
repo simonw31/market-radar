@@ -29,6 +29,8 @@ export const smartRecruiterSources = [
     slug: 'VeoliaEnvironnementSA',
     sector: 'CAC 40 · Environnement & Tech',
   },
+  { key: 'accor', name: 'Accor', slug: 'Accor', sector: 'CAC 40 · Hôtellerie' },
+  { key: 'eurofins', name: 'Eurofins', slug: 'Eurofins', sector: 'CAC 40 · Santé & Laboratoires' },
 ] as const
 
 type Config = (typeof smartRecruiterSources)[number]

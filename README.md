@@ -4,7 +4,7 @@
 
 **Ta veille emploi et tes candidatures, sur ta propre machine.**
 
-Market Radar surveille les sites carrière de 42 grandes entreprises, classe les offres selon ton profil,
+Market Radar surveille les sites carrière de 56 grandes entreprises, classe les offres selon ton profil,
 prépare un CV et une lettre adaptés avec une IA locale, remplit les formulaires des portails de recrutement
 et suit les réponses dans ta boîte mail. Rien ne sort de ton serveur. Rien n'est envoyé sans ton clic.
 
@@ -24,7 +24,7 @@ et suit les réponses dans ta boîte mail. Rien ne sort de ton serveur. Rien n'e
 
 | | |
 |---|---|
-| **Radar** | Collecte les offres de stage, d'alternance et de CDI sur 42 sites carrière (banques, conseil, industrie, tech). Chaque offre reçoit un score sur 100 et une priorité P1/P2/P3. Les offres publiées depuis moins de 24 h portent le tag « Vient de sortir ». |
+| **Radar** | Collecte les offres de stage, d'alternance et de CDI sur 56 sites carrière (banques, conseil, industrie, tech). Chaque offre reçoit un score sur 100 et une priorité P1/P2/P3. Les offres publiées depuis moins de 24 h portent le tag « Vient de sortir ». |
 | **Profils** | Plusieurs profils par installation (par exemple toi et ta colocataire) : contrats visés, mots-clés, expérience maximale, entreprises, poids du score. Chaque profil a son propre radar et son rapport. |
 | **Rapports** | Un email quotidien ou hebdomadaire avec les nouvelles offres pertinentes. Facultatif. |
 | **Candidatures** | Ton CV maître (importé depuis un PDF puis vérifié par toi) sert de base. Pour chaque offre, l'IA locale choisit les expériences et les compétences à mettre en avant et écrit une accroche. Le CV et la lettre sont assemblés à partir de gabarits et rendus en PDF avec Typst, en 70 à 90 secondes. |
